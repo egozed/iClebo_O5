@@ -26,12 +26,8 @@ class SettingsSaver(object):
         if data == self.get_from_pkl_data():
             pass
             # print("no changes-no saves")
-            # print("Was: ", self.get_from_pkl_data())
-            # print("Now: ", data)
         else:
             print("Saving change: ",newdata)
-            # print("Was: ", self.get_from_pkl_data())
-            # print("Now: ", data)
             self.save_data_to_pkl(data)
 # -------- pickle end -------------------------------- #
 
@@ -63,12 +59,8 @@ class SettingsSaver(object):
         if dumps(data) == dumps(self.get_from_json_data()):
             pass
             # print("no changes-no saves")
-        #     print("Was: ", self.get_from_json_data())
-        #     print("Now: ", data)
         else:
             print("Saving change: ", newdata)
-        #     print("Was: ", self.get_from_json_data())
-        #     print("Now: ", data)
             self.save_data_to_json(data)
 # -------- json end ---------------------------------- #
 
