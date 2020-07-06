@@ -114,7 +114,6 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
         return 'WIN of RoboData :5556'
 
     def show5556(self):
-        # alldata = D5556.get_info()  # получаем данные от рп
         alldata = self.get_info()  # получаем данные от рп
         if alldata['type_of_data'] == 1:
             self.label_d1f1.setText(f'{alldata["f1"]:.4f}')
@@ -161,9 +160,7 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
         self.update()
 
     def show_data(self, ip):  # инициализируем показ окна с данными
-        # setattr(D5556, 'ip', ip)  # перед показом окна с данными, устанавливаем айпи рп
         setattr(self, 'ip', ip)  # перед показом окна с данными, устанавливаем айпи рп
-        # D5556.connect()  # соединяемся с ip:5556
         self.port_connect()  # соединяемся с ip:5556
         self.th5556.start()  # запускаем в отдельном потоке бесконечный цикл show5556()
 
@@ -175,7 +172,6 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
         if self.th5556:
             self.th5556.requestInterruption()  # эй поток! заканчивай!
             self.th5556.wait()  # подождем пока закончит
-        # D5556.disconnect()  # отсоединяемся от ip:5556
         self.port_disconnect()  # отсоединяемся от ip:5556
         self.close()
 
@@ -192,7 +188,6 @@ class DataWinApp30001(QWidget, Ui_Form30001, DataFrom30001):
         return 'WIN of RoboData :30001'
 
     def show30001(self):
-        # alldata = D30001.get_info()
         alldata = self.get_info()
         if alldata['raw_jpg'] and alldata['sizeOfJPG']:
             pix = QPixmap()
@@ -206,8 +201,6 @@ class DataWinApp30001(QWidget, Ui_Form30001, DataFrom30001):
         self.update()
 
     def show_data(self, ip):
-        # setattr(D30001, 'ip', ip)
-        # D30001.connect()
         setattr(self, 'ip', ip)
         self.port_connect()
         self.th30001.start()
@@ -220,7 +213,6 @@ class DataWinApp30001(QWidget, Ui_Form30001, DataFrom30001):
         if self.th30001:
             self.th30001.requestInterruption()
             self.th30001.wait()
-        # D30001.disconnect()
         self.port_disconnect()
         self.close()
 
@@ -237,7 +229,6 @@ class DataWinApp30002(QWidget, Ui_Form30002, DataFrom30002):
         return 'WIN of RoboData :30002'
 
     def show30002(self):
-        # alldata = D30002.get_info()
         alldata = self.get_info()
         self.label_fl1.setText(f'{alldata["fl1"]:.3f}')
         self.label_t1.setText(alldata["t1"])
@@ -249,8 +240,6 @@ class DataWinApp30002(QWidget, Ui_Form30002, DataFrom30002):
         self.update()
 
     def show_data(self, ip):
-        # setattr(D30002, 'ip', ip)
-        # D30002.connect()
         setattr(self, 'ip', ip)
         self.port_connect()
         self.th30002.start()
@@ -263,7 +252,6 @@ class DataWinApp30002(QWidget, Ui_Form30002, DataFrom30002):
         if self.th30002:
             self.th30002.requestInterruption()
             self.th30002.wait()
-        # D30002.disconnect()
         self.port_disconnect()
         self.close()
 
@@ -280,7 +268,6 @@ class DataWinApp30003(QWidget, Ui_Form30003, DataFrom30003):
         return 'WIN of RoboData :30003'
 
     def show30003(self):
-        # raw_data = D30003.get_info()
         raw_data = self.get_info()
         if raw_data['sizeOfJPG'] < 0:  # => text
             if 'text' in raw_data.keys():
@@ -309,8 +296,6 @@ class DataWinApp30003(QWidget, Ui_Form30003, DataFrom30003):
         self.update()
 
     def show_data(self, ip):
-        # setattr(D30003, 'ip', ip)
-        # D30003.connect()
         setattr(self, 'ip', ip)
         self.port_connect()
         self.th30003.start()
@@ -324,7 +309,6 @@ class DataWinApp30003(QWidget, Ui_Form30003, DataFrom30003):
         if self.th30003:
             self.th30003.requestInterruption()
             self.th30003.wait()
-        # D30003.disconnect()
         self.port_disconnect()
         self.close()
 
