@@ -370,16 +370,15 @@ class DataFrom5556(GodOfDData):
 
 if __name__ == '__main__':
     # только для работы как с модулем(как дампер)
-    from threading import Thread
-    from os import path, mkdir
-    from shutil import rmtree
     from keyboard import is_pressed
-    from time import sleep
-    from iCleboIP4finder import get_ip
 
     flag_of_ending: bool = False
 
     def del_and_make_dirs():
+        from os import path, mkdir
+        from shutil import rmtree
+        from time import sleep
+
         for port in [5556, 30001, 30002, 30003]:
             try_delete_dirs_count: int = 100
             while path.exists(str(port)) and try_delete_dirs_count:
@@ -394,7 +393,9 @@ if __name__ == '__main__':
         print("WE ARE START!")
 
     def init_connect_data_package():
+        from iCleboIP4finder import get_ip
         global D5556, D30001, D30002, D30003
+
         my_ip4: str = get_ip()
         setattr(D5556, 'ip', my_ip4); D5556.port_connect()
         setattr(D30001, 'ip', my_ip4); D30001.port_connect()
@@ -402,10 +403,10 @@ if __name__ == '__main__':
         setattr(D30003, 'ip', my_ip4); D30003.port_connect()
         print("DATA PACKAGE FULL CONNECTED.")
 
-        print("DATA PACKAGE FULL END.")
-
     def start_threads():
+        from threading import Thread
         global D5556, D30001, D30002, D30003
+
         if user_choose_mode == 'd':
             thread1 = Thread(target=D5556.start_dump_saving)  # , args=(user_choose,))
             thread2 = Thread(target=D30001.start_dump_saving)  # , args=(user_choose,))
