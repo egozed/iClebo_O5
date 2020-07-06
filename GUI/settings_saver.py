@@ -1,6 +1,12 @@
 class SettingsSaver(object):
+    filename:str = ''
+
     def __init__(self, filename):
         self.filename = filename
+
+    def __repr__(self):
+        return f'Save the settings to {self.filename}'
+
 # -------- pickle ----------------------------------- #
     def get_from_pkl_data(self):
         from pickle import load
@@ -27,7 +33,7 @@ class SettingsSaver(object):
             pass
             # print("no changes-no saves")
         else:
-            print("Saving change: ",newdata)
+            print(self, " Changes: ",newdata)
             self.save_data_to_pkl(data)
 # -------- pickle end -------------------------------- #
 
@@ -53,14 +59,14 @@ class SettingsSaver(object):
             data.update(newdata)
         if isinstance(data, list):
             data.append(newdata)
-        # if isinstance(data, tuple):
+        # if isinstance(data, tuple):     # json - NOT saves the tuple!
         #     data = *data, newdata
 
         if dumps(data) == dumps(self.get_from_json_data()):
             pass
             # print("no changes-no saves")
         else:
-            print("Saving change: ", newdata)
+            print(self, " Changes: ",newdata)
             self.save_data_to_json(data)
 # -------- json end ---------------------------------- #
 
