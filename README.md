@@ -1,7 +1,7 @@
 # SHOWS INFO and PIC from camera 
-# from iClebo_O5 omega wi-fi cleaner robot (yujinrobot)
-# with GUI 
-# via LAN/wifi/home network.
+ from iClebo_O5 omega wi-fi cleaner robot (yujinrobot)
+ with GUI 
+ via LAN/wifi/home network.#
 
 **For works click on python main.pyw**
 
