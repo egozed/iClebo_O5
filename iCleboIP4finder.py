@@ -1,7 +1,8 @@
-# ip = '192.168.0.4'
-
 def _get_3_bytes_of_lan_ip_addr():  # get ip4 of lan network
-    """ возвращает локальный айпи тачки, типа: '192.168.0.' """
+    """ возвращает локальный айпи тачки, типа: '192.168.0.'
+    >>> _get_3_bytes_of_lan_ip_addr()
+    '192.168.0.'
+    """
     from socket import socket, AF_INET, SOCK_DGRAM
     sock = socket(AF_INET, SOCK_DGRAM)
     sock.connect(('8.8.8.8', 1))  # connect() for UDP doesn't send packets

@@ -2,12 +2,11 @@ from socket import socket, AF_INET, SOCK_STREAM
 from io import BytesIO
 from struct import unpack
 from time import strftime, localtime
-# import sys
 from math import degrees
-from abc import abstractmethod  #  ABC
+from abc import abstractmethod  # ABC
 
 
-class GodOfDData():
+class GodOfDData(object):
     ip: str = "lan_is_NOT_connected"
     _sock: socket = None
     port: int = 0
