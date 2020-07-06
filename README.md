@@ -6,8 +6,8 @@
 **For works click on python main.pyw**
 
 maybe need install some libs: 
-	$pip install pyqt5
-	$pip install keyboard
-	$...
+	`pip install pyqt5
+	`pip install keyboard
+	`...
 
 > p.s code comments in Russian lang.
