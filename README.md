@@ -8,4 +8,4 @@ maybe need install some libs:
 `pip install keyboard`
 `pip install numpy`
 
-> p.s code comments in Russian lang.
+> p.s. code comments in Russian lang.
