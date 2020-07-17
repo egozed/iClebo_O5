@@ -77,11 +77,11 @@ class GodOfDData(object):
         return raw_data_without_head_and_size, size_of_data, raw_head + raw_size
 
     @abstractmethod
-    def get_info(self):
+    def get_info(self)->dict:
         pass
 
     # только для работы как с модулем(как дампер)
-    def _save_dump(self, full_file_name):
+    def _save_dump(self, full_file_name:str):
         with open(full_file_name, 'wb') as raw_file_obj:
             raw_file_obj.write(self._get_one_raw_data_block_than_return_it()[0])
 
