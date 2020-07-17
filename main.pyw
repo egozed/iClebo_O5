@@ -40,7 +40,7 @@ class MainWindowApp(QMainWindow, Ui_MainWindow):
         self.datawindow30002 = DataWinApp30002()  # Создаём объект -//- 30002
         self.datawindow30003 = DataWinApp30003()  # Создаём объект -//- 30003
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'MainWINDOW'
 
     def closeEvent(self, event):  # жамкнули на крестик в главном окне => прихлопнуть всех
@@ -110,7 +110,7 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
         self.setGeometry(*(save.get_from_json_data()['5556']))  # размещаем это окно как оно было в прошлый раз
         self.th5556 = Th5()  # Создаём объект отдельного потока в котором будем вынимать и показывать данные из порта 5556
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'WIN of RoboData :5556'
 
     def show5556(self):
@@ -184,7 +184,7 @@ class DataWinApp30001(QWidget, Ui_Form30001, DataFrom30001):
         self.setGeometry(*(save.get_from_json_data()['30001']))
         self.th30001 = Th1()  # Создаём объект отдельного потока в котором будем вынимать и показывать данные из порта 30001
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'WIN of RoboData :30001'
 
     def show30001(self):
@@ -225,7 +225,7 @@ class DataWinApp30002(QWidget, Ui_Form30002, DataFrom30002):
         self.setGeometry(*(save.get_from_json_data()['30002']))
         self.th30002 = Th2()  # Создаём объект отдельного потока в котором будем вынимать и показывать данные из порта 30002
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'WIN of RoboData :30002'
 
     def show30002(self):
@@ -264,7 +264,7 @@ class DataWinApp30003(QWidget, Ui_Form30003, DataFrom30003):
         self.setGeometry(*(save.get_from_json_data()['30003']))
         self.th30003 = Th3()  # Создаём объект отдельного потока в котором будем вынимать и показывать данные из порта 30003
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'WIN of RoboData :30003'
 
     def show30003(self):
@@ -317,7 +317,7 @@ class Th1(QThread):
     def __init__(self):
         super().__init__()
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'Thread for 30001'
 
     def run(self):
@@ -332,7 +332,7 @@ class Th2(QThread):
     def __init__(self):
         super().__init__()
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'Thread for 30002'
 
     def run(self):
@@ -347,7 +347,7 @@ class Th3(QThread):
     def __init__(self):
         super().__init__()
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'Thread for 30003'
 
     def run(self):
@@ -362,7 +362,7 @@ class Th5(QThread):
     def __init__(self):
         super().__init__()
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return 'Thread for 5556'
 
     def run(self):
