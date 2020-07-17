@@ -20,7 +20,7 @@ class GodOfDData(object):
         self.port_disconnect()
         print(f"{self} is DIE!")
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return f'RoboData {self.ip}:{self.port}'
 
     def port_connect(self):
@@ -44,7 +44,7 @@ class GodOfDData(object):
         self.port_disconnect()
         self.port_connect()
 
-    def _get_one_raw_data_block_than_return_it(self):
+    def _get_one_raw_data_block_than_return_it(self)->tuple:
         """ возвращает tuple(
     сырой_блок_данных_без_размера_и_заголовка,
     размер_блока,
@@ -116,7 +116,7 @@ class GodOfDData(object):
 class DataFrom30001(GodOfDData):
     port: int = 30001
 
-    def get_info(self):
+    def get_info(self)->dict:
         alldata: dict = {}
         sizeOfJPG: int
 
@@ -138,7 +138,7 @@ class DataFrom30001(GodOfDData):
 class DataFrom30002(GodOfDData):
     port: int = 30002
 
-    def get_info(self):
+    def get_info(self)->dict:
         alldata: dict = {}
         fl1: float
         int1: int
@@ -188,7 +188,7 @@ class DataFrom30002(GodOfDData):
 class DataFrom30003(GodOfDData):
     port: int = 30003
 
-    def get_info(self):
+    def get_info(self)->dict:
         alldata: dict = {}
         sizeOfJPG: int = 0
         raw_jpg: bytes
@@ -245,7 +245,7 @@ class DataFrom30003(GodOfDData):
 class DataFrom5556(GodOfDData):
     port: int = 5556
 
-    def _get_one_raw_data_block_and_type_of_data_than_return_it(self):
+    def _get_one_raw_data_block_and_type_of_data_than_return_it(self)->tuple:
         heading: int
         raw_data_without_head_and_size: bytes
         type_of_data: int
@@ -271,7 +271,7 @@ class DataFrom5556(GodOfDData):
                     continue
         return raw_data_without_head_and_size, type_of_data, size_of_data, raw_head + raw_type_plus_raw_size
 
-    def get_info(self):
+    def get_info(self)->dict:
         f1: float
         f2: float
         f3: float
