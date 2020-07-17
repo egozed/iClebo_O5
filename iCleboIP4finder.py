@@ -1,4 +1,4 @@
-def _get_3_bytes_of_lan_ip_addr():  # get ip4 of lan network
+def _get_3_bytes_of_lan_ip_addr()->str:  # get ip4 of lan network
     """ возвращает локальный айпи тачки, типа: '192.168.0.'
     >>> _get_3_bytes_of_lan_ip_addr()
     '192.168.0.'
@@ -15,7 +15,7 @@ def _get_3_bytes_of_lan_ip_addr():  # get ip4 of lan network
     return ip4
 
 
-def _scan_lan_for_get_full_ip(ip: str):  # scan all_lan_for_get_ip
+def _scan_lan_for_get_full_ip(ip: str)->str:  # scan all_lan_for_get_ip
     """ перебирает все хосты сети ip, если найден рп-возвращает его адрес(либо 3_bytes_of_lan_ip_addr, если не найдет)"""
     from os import popen
     with popen('arp -a') as f:
@@ -39,7 +39,7 @@ def _scan_lan_for_get_full_ip(ip: str):  # scan all_lan_for_get_ip
         return ip
 
 
-def _these_host_is_a_robot(ip4):
+def _these_host_is_a_robot(ip4)->bool:
     """ проверяет, ip4 - это рп или нет. возвращает True или False """
     from socket import socket, AF_INET, SOCK_STREAM
     shure_these_robot_ip: int = 0
@@ -61,7 +61,7 @@ def _these_host_is_a_robot(ip4):
     else:
         return False
 
-def get_ip():
+def get_ip()->str:
     """Return iClebo_O5 LAN IP4 address
     >>> get_ip()
     '192.168.0.4'
