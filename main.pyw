@@ -1,6 +1,6 @@
 # MACRO DEFINES
-PYSIDE_OR_PYQT = 'PYQT'     # CHOOSE GUI: PYSIDE |or| PYQT   ???
-DELAY = 1       # delay for showing info from 1 ms to infinity ms
+PYSIDE_OR_PYQT:str = 'PYQT'     # CHOOSE GUI: PYSIDE |or| PYQT   ???
+DELAY:int = 1       # delay for showing info from 1 ms to infinity ms
 
 if PYSIDE_OR_PYQT == 'PYQT':
     # --------- инициализашки для PyQt5 --------------------
@@ -29,7 +29,7 @@ from data import DataFrom5556, DataFrom30001, DataFrom30002, DataFrom30003  # da
 
 
 class MainWindowApp(QMainWindow, Ui_MainWindow):
-    def __init__(self, ip):
+    def __init__(self, ip:str):
         super().__init__()  # Это здесь нужно для доступа к переменным, методам QMainWindow, Ui_MainWindow
         self.setupUi(self)  # Это нужно для инициализации нашего дизайна Ui_MainWindow
         self.ip = ip  # принимаем айпи рп и хапаем его себе
@@ -61,7 +61,7 @@ class MainWindowApp(QMainWindow, Ui_MainWindow):
             app.quit()
             print('The End.')
 
-    def pushButton_30001click(self, isVisible):  # обработчик жамки на кнопу "30001"
+    def pushButton_30001click(self, isVisible:bool):  # обработчик жамки на кнопу "30001"
         self.datawindow30001.setWindowTitle(f"{self.ip}:30001")  # делаем заголовок этого окна типа: "ай.пи.р.п : 30001"
         self.datawindow30001.setVisible(isVisible)  # делаем окно с данными (видимым или невидимым) в зависимости от кнопки
         if isVisible:
@@ -71,7 +71,7 @@ class MainWindowApp(QMainWindow, Ui_MainWindow):
             print(" 30001 is unpressed")
             self.datawindow30001.closeEvent(self)  # захлопываем это окно с данными
 
-    def pushButton_30002click(self, isVisible):
+    def pushButton_30002click(self, isVisible:bool):
         self.datawindow30002.setWindowTitle(f"{self.ip}:30002")
         self.datawindow30002.setVisible(isVisible)
         if isVisible:
@@ -81,7 +81,7 @@ class MainWindowApp(QMainWindow, Ui_MainWindow):
             print(" 30002 is unpressed")
             self.datawindow30002.closeEvent(self)
 
-    def pushButton_30003click(self, isVisible):
+    def pushButton_30003click(self, isVisible:bool):
         self.datawindow30003.setWindowTitle(f"{self.ip}:30003")
         self.datawindow30003.setVisible(isVisible)
         if isVisible:
@@ -91,7 +91,7 @@ class MainWindowApp(QMainWindow, Ui_MainWindow):
             print(" 30003 is unpressed")
             self.datawindow30003.closeEvent(self)
 
-    def pushButton_5556click(self, isVisible):
+    def pushButton_5556click(self, isVisible:bool):
         self.datawindow5556.setWindowTitle(f"{self.ip}:5556")
         self.datawindow5556.setVisible(isVisible)
         if isVisible:
@@ -159,7 +159,7 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
             print(f'5556 type of data = {alldata["type_of_data"]} NOT recognized')  # вдруг будет новинький тип блока данных
         self.update()
 
-    def show_data(self, ip):  # инициализируем показ окна с данными
+    def show_data(self, ip:str):  # инициализируем показ окна с данными
         setattr(self, 'ip', ip)  # перед показом окна с данными, устанавливаем айпи рп
         self.port_connect()  # соединяемся с ip:5556
         self.th5556.start()  # запускаем в отдельном потоке бесконечный цикл show5556()
@@ -200,7 +200,7 @@ class DataWinApp30001(QWidget, Ui_Form30001, DataFrom30001):
         # там еще дохера данных
         self.update()
 
-    def show_data(self, ip):
+    def show_data(self, ip:str):
         setattr(self, 'ip', ip)
         self.port_connect()
         self.th30001.start()
@@ -239,7 +239,7 @@ class DataWinApp30002(QWidget, Ui_Form30002, DataFrom30002):
         # там еще дохера данных
         self.update()
 
-    def show_data(self, ip):
+    def show_data(self, ip:str):
         setattr(self, 'ip', ip)
         self.port_connect()
         self.th30002.start()
@@ -295,7 +295,7 @@ class DataWinApp30003(QWidget, Ui_Form30003, DataFrom30003):
                         self.label_jpg.setPixmap(pix)
         self.update()
 
-    def show_data(self, ip):
+    def show_data(self, ip:str):
         setattr(self, 'ip', ip)
         self.port_connect()
         self.th30003.start()
