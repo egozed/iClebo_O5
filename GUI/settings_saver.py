@@ -4,7 +4,7 @@ class SettingsSaver(object):
     def __init__(self, filename):
         self.filename = filename
 
-    def __repr__(self):
+    def __repr__(self)->str:
         return f'Save the settings to {self.filename}'
 
 # -------- pickle ----------------------------------- #
