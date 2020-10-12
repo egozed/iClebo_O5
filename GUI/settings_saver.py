@@ -1,8 +1,8 @@
 class SettingsSaver(object):
     filename: str = ''
 
-    def __init__(self, filename):
-        self.filename = filename
+    def __init__(self, any_filename):
+        self.filename = any_filename
 
     def __repr__(self) -> str:
         return f'Save the settings to {self.filename}'
