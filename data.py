@@ -20,7 +20,7 @@ class GodOfDData(object):
         self.port_disconnect()
         print(f"{self} is DIE!")
 
-    def __repr__(self)->str:
+    def __repr__(self) -> str:
         return f'RoboData {self.ip}:{self.port}'
 
     def port_connect(self):
@@ -44,18 +44,18 @@ class GodOfDData(object):
         self.port_disconnect()
         self.port_connect()
 
-    def _get_one_raw_data_block_than_return_it(self)->tuple:
+    def _get_one_raw_data_block_than_return_it(self) -> tuple:
         """ возвращает tuple(
     сырой_блок_данных_без_размера_и_заголовка,
     размер_блока,
     сырой_заголовок_с_сырым_размером_блока
     )
     получаемые с конкретного сетевого порта """
-        raw_data_without_head_and_size: bytes
+        raw_data_without_head_and_size: str  # bytes
         size_of_data: int
         heading: int
-        raw_head: bytes
-        raw_size: bytes
+        raw_head: str  # bytes
+        raw_size: str  # bytes
         wrong_head: bool = True
 
         while wrong_head:
@@ -77,18 +77,20 @@ class GodOfDData(object):
         return raw_data_without_head_and_size, size_of_data, raw_head + raw_size
 
     @abstractmethod
-    def get_info(self)->dict:
+    def get_info(self) -> dict:
         pass
 
     # только для работы как с модулем(как дампер)
-    def _save_dump(self, full_file_name:str):
+    def _save_dump(self, full_file_name: str):
         with open(full_file_name, 'wb') as raw_file_obj:
             raw_file_obj.write(self._get_one_raw_data_block_than_return_it()[0])
 
     def _save_stream(self, raw_file_obj):
-        (raw_data_without_head_and_size, 
-         size_of_data, 
-         raw_head_plus_raw_size) = self._get_one_raw_data_block_than_return_it()
+        (
+            raw_data_without_head_and_size,
+            size_of_data,
+            raw_head_plus_raw_size
+        ) = self._get_one_raw_data_block_than_return_it()
         raw_file_obj.write(raw_head_plus_raw_size + raw_data_without_head_and_size)
 
     def start_dump_saving(self):
@@ -116,7 +118,7 @@ class GodOfDData(object):
 class DataFrom30001(GodOfDData):
     port: int = 30001
 
-    def get_info(self)->dict:
+    def get_info(self) -> dict:
         alldata: dict = {}
         sizeOfJPG: int
 
@@ -125,9 +127,19 @@ class DataFrom30001(GodOfDData):
             # print(f"full size = {rawData.getbuffer().nbytes}")
             (
                 howMuchDataBlocks,  # 1 int
-                fo, optX, optY, ang, R, cal_dev, scale,  # 7 float
-                srcX, srcY, dstX, dstY,  # 4 int
-                camX, camY,  # 2 float
+                fo,  # float
+                optX,  # float
+                optY,  # float
+                ang,  # float
+                R,  # float
+                cal_dev,  # float
+                scale,  # float
+                srcX,  # int
+                srcY,  # int
+                dstX,  # int
+                dstY,  # int
+                camX,  # float
+                camY,  # float
                 sizeOfJPG  # 1 int
             ) = unpack('1i7f4i2f1i', rawData.read(4 * 15))
             alldata['sizeOfJPG'] = sizeOfJPG
@@ -138,7 +150,7 @@ class DataFrom30001(GodOfDData):
 class DataFrom30002(GodOfDData):
     port: int = 30002
 
-    def get_info(self)->dict:
+    def get_info(self) -> dict:
         alldata: dict = {}
         fl1: float
         int1: int
@@ -156,11 +168,11 @@ class DataFrom30002(GodOfDData):
         with BytesIO(raw_data) as rawData:
             # print(f"full size = {rawData.getbuffer().nbytes}")
             (
-                fl1,
-                int1,
-                int2,
-                int3,
-                int4,
+                fl1,  # float
+                int1,  # int
+                int2,  # int
+                int3,  # int
+                int4,  # int
             ) = unpack('1f4i', rawData.read(4 * 5))
             rawData.seek(-297, 2)
             (sizeOfText,) = unpack('1i', rawData.read(4))
@@ -182,13 +194,13 @@ class DataFrom30002(GodOfDData):
         txt2 = Text2.decode('ascii')
         alldata['t6'], \
         alldata['t7'] = txt2.split('\n')
-        return alldata	#  = fl1, t1, t2, t3, t4, t6
+        return alldata  # = fl1, t1, t2, t3, t4, t6
 
 
 class DataFrom30003(GodOfDData):
     port: int = 30003
 
-    def get_info(self)->dict:
+    def get_info(self) -> dict:
         alldata: dict = {}
         sizeOfJPG: int = 0
         raw_jpg: bytes
@@ -219,16 +231,30 @@ class DataFrom30003(GodOfDData):
                 while how_much_datablocks_will_be:
                     (type_of_data,) = unpack('1i', rawData.read(4))
                     if type_of_data == 1000:
-                        (xf1, yf1, angf1, xf2, yf2, angf2,) = unpack('6f', rawData.read(24))
+                        (
+                            xf1,  # float
+                            yf1,  # float
+                            angf1,  # float
+                            xf2,  # float
+                            yf2,  # float
+                            angf2,  # float
+                         ) = unpack('6f', rawData.read(24))
                         xf = (xf1 + xf2) / 2
                         yf = (yf1 + yf2) / 2
                         angf = (angf1 + angf2) / 2
                         alldata['1000'] = (xf, yf, angf)
                     elif type_of_data == 1004:
-                        (d1, f7, f8, i1, h1, h2) = unpack('1d2f1i2h', rawData.read(24))  # b1,b2,b3,b4,b5,b6,b7,b8,
+                        (
+                            d1,  # double
+                            f7,  # float
+                            f8,  # float
+                            i1,  # int
+                            h1,  # short
+                            h2  # short
+                        ) = unpack('1d2f1i2h', rawData.read(24))  #
                         d1 /= 1000
                         my_time = strftime(f"%Y.%m.%d %H:%M:%S.{repr(d1).split('.')[1][:3]}", localtime(d1))
-                        alldata['1004'] = (my_time, f7, f8)  # ,b1,b2,b3,b4,b5,b6,b7,b8
+                        alldata['1004'] = (my_time, f7, f8)  #
                     else:
                         with open(f'WTF30003-{type_of_data}.bin', 'wb') as raw_file_obj:
                             rawData.seek(-4, 1)
@@ -239,19 +265,19 @@ class DataFrom30003(GodOfDData):
                 raw_jpg = rawData.read(sizeOfJPG - 12)
                 alldata['jpg'] = raw_jpg
         alldata['sizeOfJPG'] = sizeOfJPG - 12
-        return alldata	# = data1000, data1004, raw_jpg
+        return alldata  # = data1000, data1004, raw_jpg
 
 
 class DataFrom5556(GodOfDData):
     port: int = 5556
 
-    def _get_one_raw_data_block_and_type_of_data_than_return_it(self)->tuple:
+    def _get_one_raw_data_block_and_type_of_data_than_return_it(self) -> tuple:
         heading: int
-        raw_data_without_head_and_size: bytes
+        raw_data_without_head_and_size: str  # bytes
         type_of_data: int
         size_of_data: int
-        raw_head: bytes
-        raw_type_plus_raw_size: bytes
+        raw_head: str  # bytes
+        raw_type_plus_raw_size: str  # bytes
         wrong_head: bool = True
 
         while wrong_head:
@@ -260,7 +286,10 @@ class DataFrom5556(GodOfDData):
                 (heading,) = unpack('1i', raw_head)
                 if heading == -0x55aa55ab:  # a в хекс-редакторе мы видим: "55AA55AA"
                     raw_type_plus_raw_size = rawData.read(12)
-                    (type_of_data, size_of_data,) = unpack('1i4x1i', raw_type_plus_raw_size)
+                    (
+                        type_of_data,  # int
+                        size_of_data,  # int
+                    ) = unpack('1i4x1i', raw_type_plus_raw_size)
                     raw_data_without_head_and_size = rawData.read(size_of_data)
                     wrong_head = False  #
                     break
@@ -271,7 +300,7 @@ class DataFrom5556(GodOfDData):
                     continue
         return raw_data_without_head_and_size, type_of_data, size_of_data, raw_head + raw_type_plus_raw_size
 
-    def get_info(self)->dict:
+    def get_info(self) -> dict:
         f1: float
         f2: float
         f3: float
@@ -291,14 +320,24 @@ class DataFrom5556(GodOfDData):
             # size = rawData.getbuffer().nbytes
             alldata['type_of_data'] = type_of_data
             if type_of_data == 1:  # all GET
-                (f1, f2, f3, f4, f5,) = unpack('5f', rawData.read(20))  # f1 0.0 f3 0.0 0.0
+                (
+                    f1,  # float
+                    f2,  # float
+                    f3,  # float
+                    f4,  # float
+                    f5,  # float
+                ) = unpack('5f', rawData.read(20))  # f1 0.0 f3 0.0 0.0
                 alldata['f1'] = f1
                 alldata['f2'] = f2
                 alldata['f3'] = f3
                 alldata['f4'] = f4
                 alldata['f5'] = f5
             elif type_of_data == 2:  # NOT ALL
-                (i1, i2, i3,) = unpack('3i', rawData.read(12))
+                (
+                    i1,  # int
+                    i2,  # int
+                    i3,  # int
+                ) = unpack('3i', rawData.read(12))
                 alldata['i1'] = i1
                 alldata['i2'] = i2
                 alldata['i3'] = i3 / 100
@@ -310,7 +349,15 @@ class DataFrom5556(GodOfDData):
                 # rawblk4 = rawData.read(608)
                 rawblk5 = rawData.read(608)
                 with BytesIO(rawblk5) as raw5556Data8:  # NOT ALL
-                    (i1, f2, i3, f4, i5, charger_status, bat_volt,) = unpack('20x1i16x1f1i4x1f3i', raw5556Data8.read(68))
+                    (
+                        i1,  # int
+                        f2,  # float
+                        i3,  # int
+                        f4,  # float
+                        i5,  # int
+                        charger_status,  # int
+                        bat_volt,  # int
+                    ) = unpack('20x1i16x1f1i4x1f3i', raw5556Data8.read(68))
                 alldata['i1'] = i1
                 alldata['f2'] = f2
                 alldata['i3'] = i3
@@ -319,7 +366,11 @@ class DataFrom5556(GodOfDData):
                 alldata['charger_status'] = charger_status
                 alldata['bat_volt'] = bat_volt
             elif type_of_data == 10:  # all GET
-                (f1, f2, f3,) = unpack('3f', rawData.read(12))
+                (
+                    f1,  # float
+                    f2,  # float
+                    f3,  # float
+                ) = unpack('3f', rawData.read(12))
                 alldata['f1'] = f1 * 1000
                 alldata['f2'] = f2 * 1000
                 alldata['f3'] = degrees(f3)
@@ -327,7 +378,13 @@ class DataFrom5556(GodOfDData):
                 datablock_cnt = size_of_data // 20
                 while datablock_cnt:
                     # rawData.seek(size_of_data - 20, 1)
-                    (f1, f2, f3, f4, f5,) = unpack('5f', rawData.read(20))
+                    (
+                        f1,  # float
+                        f2,  # float
+                        f3,  # float
+                        f4,  # float
+                        f5,  # float
+                     ) = unpack('5f', rawData.read(20))
                     datablock_cnt -= 1
                 alldata['f1'] = f1
                 alldata['f2'] = f2
@@ -340,19 +397,23 @@ class DataFrom5556(GodOfDData):
         return alldata
 
     def _save_dump(self, full_file_name: str):
-        (raw_data_without_head_and_size,
-         type_of_data,
-         size_of_data,
-         raw_head_plus_raw_type_plus_raw_size) = self._get_one_raw_data_block_and_type_of_data_than_return_it()
+        (
+            raw_data_without_head_and_size,
+            type_of_data,
+            size_of_data,
+            raw_head_plus_raw_type_plus_raw_size
+        ) = self._get_one_raw_data_block_and_type_of_data_than_return_it()
         full_file_name += f'{type_of_data}.bin'
         with open(full_file_name, 'wb') as raw_file_obj:
             raw_file_obj.write(raw_data_without_head_and_size)
 
     def _save_stream(self, raw_file_obj):
-        (raw_data_without_head_and_size,
-         type_of_data,
-         size_of_data,
-         raw_head_plus_raw_type_plus_raw_size) = self._get_one_raw_data_block_and_type_of_data_than_return_it()
+        (
+            raw_data_without_head_and_size,
+            type_of_data,
+            size_of_data,
+            raw_head_plus_raw_type_plus_raw_size
+        ) = self._get_one_raw_data_block_and_type_of_data_than_return_it()
         raw_file_obj.write(raw_head_plus_raw_type_plus_raw_size + raw_data_without_head_and_size)
 
     def start_dump_saving(self):
@@ -373,6 +434,7 @@ if __name__ == '__main__':
 
     flag_of_ending: bool = False
 
+
     def del_and_make_dirs():
         from os import path, mkdir
         from shutil import rmtree
@@ -391,16 +453,22 @@ if __name__ == '__main__':
             mkdir(str(port))
         print("WE ARE START!")
 
+
     def init_connect_data_package():
         from iCleboIP4finder import get_ip
         global D5556, D30001, D30002, D30003
 
         my_ip4: str = get_ip()
-        setattr(D5556, 'ip', my_ip4); D5556.port_connect()
-        setattr(D30001, 'ip', my_ip4); D30001.port_connect()
-        setattr(D30002, 'ip', my_ip4); D30002.port_connect()
-        setattr(D30003, 'ip', my_ip4); D30003.port_connect()
+        setattr(D5556, 'ip', my_ip4)
+        D5556.port_connect()
+        setattr(D30001, 'ip', my_ip4)
+        D30001.port_connect()
+        setattr(D30002, 'ip', my_ip4)
+        D30002.port_connect()
+        setattr(D30003, 'ip', my_ip4)
+        D30003.port_connect()
         print("DATA PACKAGE FULL CONNECTED.")
+
 
     def start_threads():
         from threading import Thread
@@ -411,7 +479,7 @@ if __name__ == '__main__':
             thread2 = Thread(target=D30001.start_dump_saving)  # , args=(user_choose,))
             thread3 = Thread(target=D30002.start_dump_saving)  # , args=(user_choose,))
             thread4 = Thread(target=D30003.start_dump_saving)  # , args=(user_choose,))
-        else:   # user_choose_func == 'r':
+        else:  # user_choose_func == 'r':
             thread1 = Thread(target=D5556.start_stream_saving)  # , args=(user_choose,))
             thread2 = Thread(target=D30001.start_stream_saving)  # , args=(user_choose,))
             thread3 = Thread(target=D30002.start_stream_saving)  # , args=(user_choose,))
@@ -427,10 +495,12 @@ if __name__ == '__main__':
         thread3.join()
         thread4.join()
 
+
     def start_making_and_saving_dumps():
         del_and_make_dirs()
         init_connect_data_package()
         start_threads()
+
 
     print('DUMPS MODE(for research): For make separate files dumps, input "d"')
     print('RECORD MODE(for logging): For make 1 BIG dumpfile, input "r"')
@@ -444,10 +514,14 @@ if __name__ == '__main__':
         D30003 = DataFrom30003()
         start_making_and_saving_dumps()
         # kill_data_package
-        if D5556: del D5556
-        if D30001: del D30001
-        if D30002: del D30002
-        if D30003: del D30003
+        if D5556:
+            del D5556
+        if D30001:
+            del D30001
+        if D30002:
+            del D30002
+        if D30003:
+            del D30003
 
     print('The End.')
     exit(0)

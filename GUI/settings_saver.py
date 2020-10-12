@@ -1,13 +1,13 @@
 class SettingsSaver(object):
-    filename:str = ''
+    filename: str = ''
 
     def __init__(self, filename):
         self.filename = filename
 
-    def __repr__(self)->str:
+    def __repr__(self) -> str:
         return f'Save the settings to {self.filename}'
 
-# -------- pickle ----------------------------------- #
+    # -------- pickle ----------------------------------- #
     def get_from_pkl_data(self):
         from pickle import load
         with open(self.filename, 'rb') as fromFile:
@@ -22,7 +22,7 @@ class SettingsSaver(object):
     def add_data_to_pkl(self, newdata):
         data = self.get_from_pkl_data()
 
-        if isinstance(data,dict):
+        if isinstance(data, dict):
             data.update(newdata)
         if isinstance(data, list):
             data.append(newdata)
@@ -33,11 +33,12 @@ class SettingsSaver(object):
             pass
             # print("no changes-no saves")
         else:
-            print(self, " Changes: ",newdata)
+            print(self, " Changes: ", newdata)
             self.save_data_to_pkl(data)
-# -------- pickle end -------------------------------- #
 
-# -------- json -------------------------------------- #
+    # -------- pickle end -------------------------------- #
+
+    # -------- json -------------------------------------- #
     def get_from_json_data(self):
         from json import load
         from codecs import open
@@ -66,25 +67,27 @@ class SettingsSaver(object):
             pass
             # print("no changes-no saves")
         else:
-            print(self, " Changes: ",newdata)
+            print(self, " Changes: ", newdata)
             self.save_data_to_json(data)
+
+
 # -------- json end ---------------------------------- #
 
 
 if __name__ == '__main__':
     # только для работы как с модулем(как test-data-дампер)
     data = {
-            'ip':               '192.168.0.4',
-            'winMAINcoord':    (320,240,640,480),
-            'win5556coord':    (320,240,640,480),
-            'win30001coord':    (320,240,640,480),
-            'win30002coord':    (320,240,640,480),
-            'win30003coord':    (320,240,640,480)
-            }
+        'ip': '192.168.0.4',
+        'winMAINcoord': (320, 240, 640, 480),
+        'win5556coord': (320, 240, 640, 480),
+        'win30001coord': (320, 240, 640, 480),
+        'win30002coord': (320, 240, 640, 480),
+        'win30003coord': (320, 240, 640, 480)
+    }
     filename = 'test-settings.bin'
     ini = SettingsSaver(filename)
     ini.save_data_to_pkl(data)
-    ini.add_data_to_pkl({'785':0.32})
+    ini.add_data_to_pkl({'785': 0.32})
     data_loaded = ini.get_from_pkl_data()
     print(data_loaded)
     del ini
@@ -92,7 +95,7 @@ if __name__ == '__main__':
     filename = 'test-settings.json'
     ini = SettingsSaver(filename)
     ini.save_data_to_json(data)
-    ini.add_data_to_json({'78':0.32})
+    ini.add_data_to_json({'78': 0.32})
     data_loaded = ini.get_from_json_data()
     print(data_loaded)
     del ini
