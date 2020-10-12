@@ -22,11 +22,12 @@ def _scan_lan_for_get_full_ip(ip: str) -> str:  # scan all_lan_for_get_ip
         raw_arp_data = f.read()
     list_of_ips: list = []
     from re import findall, search
-    mac_pattern = '70-f1-1c'
-    for arp_data in findall('([-.0-9]+)\s+([-0-9a-f]{17})\s', raw_arp_data):
+    mac_pattern = "70-f1-1c-*"
+    for arp_data in findall(r"([-.0-9]+)\s+([-0-9a-f]{17})\s", raw_arp_data):
         if search(mac_pattern, arp_data[1]):
             list_of_ips.append(arp_data[0])
     if not list_of_ips:
+        print("hghjghgjhg")
         for last_octet_ip in range(1, 255):
             host = ip + str(last_octet_ip)
             if _these_host_is_a_robot(host):
