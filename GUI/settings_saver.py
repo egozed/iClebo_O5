@@ -1,7 +1,7 @@
 class SettingsSaver(object):
     filename: str = ''
 
-    def __init__(self, any_filename):
+    def __init__(self, any_filename: str):
         self.filename = any_filename
 
     def __repr__(self) -> str:
@@ -84,7 +84,7 @@ if __name__ == '__main__':
         'win30002coord': (320, 240, 640, 480),
         'win30003coord': (320, 240, 640, 480)
     }
-    filename = 'test-settings.bin'
+    filename = 'mytest-settings.bin'
     ini = SettingsSaver(filename)
     ini.save_data_to_pkl(data)
     ini.add_data_to_pkl({'785': 0.32})
