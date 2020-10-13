@@ -52,14 +52,14 @@ class SettingsSaver(object):
         with open(self.filename, mode='w', encoding='utf-8') as toFile:
             dump(data, toFile, indent=4)
 
-    def add_data_to_json(self, newdata):
+    def add_data_to_json(self, data_for_adding):
         from json import dumps
         data = self.get_from_json_data()
 
         if isinstance(data, dict):
-            data.update(newdata)
+            data.update(data_for_adding)
         if isinstance(data, list):
-            data.append(newdata)
+            data.append(data_for_adding)
         # if isinstance(data, tuple):     # json - NOT saves the tuple!
         #     data = *data, newdata
 
@@ -67,7 +67,7 @@ class SettingsSaver(object):
             pass
             # print("no changes-no saves")
         else:
-            print(self, " Changes: ", newdata)
+            print(self, " Changes: ", data_for_adding)
             self.save_data_to_json(data)
 
 
