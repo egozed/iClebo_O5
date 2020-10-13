@@ -8,16 +8,13 @@ def _get_3_bytes_of_lan_ip_addr() -> str:  # get ip4 of lan network
     sock.connect(('255.255.255.255', 0))  # connect('any.random.ip.addr', anyRandomPort) for UDP doesn't send packets
     local_ip_address_str = sock.getsockname()[0]  # получаем локальный айпи адрес источника
     sock.close()
-    local_ip_address_list = local_ip_address_str.split('.')  # делим целую строку из локального айпи адреса на октеты
-    local_ip_address_list.pop()  # удаляем из строки локального адреса последний октет
-    local_ip_address_str = '.'.join(local_ip_address_list)  # собираем адрес обратно в строку
-    ip4 = local_ip_address_str + '.'  # send str like '192.168.0.'
+    ip4 = local_ip_address_str[0:local_ip_address_str.rfind('.')+1]  # удаляем из строки локального адреса последний октет
     return ip4
 
 
 def _scan_lan_for_get_full_ip(ip: str) -> str:  # scan all_lan_for_get_ip
     """ перебирает все хосты сети ip, если найден рп-возвращает его адрес(либо 3_bytes_of_lan_ip_addr, если не найдет)"""
-    from os import popen
+    from os import popen  # ищем в арп-таблице по маку (это быстро)
     with popen('arp -a') as f:
         raw_arp_data = f.read()
     list_of_ips: list = []
@@ -25,8 +22,9 @@ def _scan_lan_for_get_full_ip(ip: str) -> str:  # scan all_lan_for_get_ip
     mac_pattern = "70-f1-1c-*"
     for arp_data in findall(r"([-.0-9]+)\s+([-0-9a-f]{17})\s", raw_arp_data):
         if search(mac_pattern, arp_data[1]):
-            list_of_ips.append(arp_data[0])
-    if not list_of_ips:
+            list_of_ips.append(arp_data[0])  # ...а если не нашли...
+
+    if not list_of_ips:  # брутим локалку по айпи от х.х.х.1 до х.х.х.255  (это долго)
         for last_octet_ip in range(1, 255):
             host = ip + str(last_octet_ip)
             if _these_host_is_a_robot(host):
@@ -40,12 +38,12 @@ def _scan_lan_for_get_full_ip(ip: str) -> str:  # scan all_lan_for_get_ip
         return ip
 
 
-def _these_host_is_a_robot(ip4) -> bool:
+def _these_host_is_a_robot(ip4: str) -> bool:
     """ проверяет, ip4 - это рп или нет. возвращает True или False """
     from socket import socket, AF_INET, SOCK_STREAM
     shure_these_robot_ip: int = 0
 
-    for trying_port in [5556, 30001, 30002, 30003]:
+    for trying_port in (5556, 30001, 30002, 30003):
         sock = socket(AF_INET, SOCK_STREAM)
         sock.settimeout(0.1)
         try:
@@ -72,10 +70,6 @@ def get_ip() -> str:
 
 
 if __name__ == '__main__':
-
-    print("robot ip = ", get_ip())
-
     from doctest import testmod
-
     testmod()
     exit(0)
