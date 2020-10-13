@@ -19,10 +19,10 @@ def _scan_lan_for_get_full_ip(ip: str) -> str:  # scan all_lan_for_get_ip
         raw_arp_data = f.read()
     list_of_ips: list = []
     from re import findall, search
-    mac_pattern = "70-f1-1c-*"
-    for arp_data in findall(r"([-.0-9]+)\s+([-0-9a-f]{17})\s", raw_arp_data):
-        if search(mac_pattern, arp_data[1]):
-            list_of_ips.append(arp_data[0])  # ...а если не нашли...
+    mac_pattern = "70-f1-1c-"
+
+    for (arp_data_ip, arp_data_mac) in findall('('+ip+r'[0-9])+\s+('+mac_pattern+r'[-0-9a-f]{8})', raw_arp_data):
+        list_of_ips.append(arp_data_ip)  # ...а если не нашли...
 
     if not list_of_ips:  # брутим локалку по айпи от х.х.х.1 до х.х.х.255  (это долго)
         for last_octet_ip in range(1, 255):
