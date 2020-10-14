@@ -17,25 +17,21 @@ def _scan_lan_for_get_full_ip(ip: str) -> str:  # scan all_lan_for_get_ip
     from os import popen  # ищем в арп-таблице по маку (это быстро)
     with popen('arp -a') as f:
         raw_arp_data = f.read()
-    list_of_ips: list = []
-    from re import findall, search
+
+    from re import findall
     mac_pattern = "70-f1-1c-"
+    for arp_data_ip in findall(r'\s+('+ip+r'[\d]+)\s+'+mac_pattern+r'[-0-9a-f]{8}', raw_arp_data):
+        if _these_host_is_a_robot(arp_data_ip):
+            return arp_data_ip
 
-    for (arp_data_ip, arp_data_mac) in findall('('+ip+r'[0-9])+\s+('+mac_pattern+r'[-0-9a-f]{8})', raw_arp_data):
-        list_of_ips.append(arp_data_ip)  # ...а если не нашли...
-
-    if not list_of_ips:  # брутим локалку по айпи от х.х.х.1 до х.х.х.255  (это долго)
+    if not arp_data_ip:  # а если не нашли,брутим локалку по айпи от х.х.х.1 до х.х.х.255  (это долго)
         for last_octet_ip in range(1, 255):
             host = ip + str(last_octet_ip)
             if _these_host_is_a_robot(host):
-                ip = host
-                break
-            else:
-                continue
-        return ip
-    else:
-        ip = list_of_ips[0]
-        return ip
+                return host
+
+    return ip  # а если не нашли , -> 192.168.0.
+
 
 
 def _these_host_is_a_robot(ip4: str) -> bool:
