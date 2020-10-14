@@ -115,12 +115,23 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
 
     def show5556(self):
         alldata = self.get_info()  # получаем данные от рп
-        if alldata['type_of_data'] == 8:
-            self.label_d8i1.setText(f'{alldata["i1"]}'),
-            self.label_d8f2.setText(f'{alldata["f2"]:.2f}'),
-            # if i3: self.datawindow5556.label_d8i3.setText(f'{i3}'),
-            # if f4: self.datawindow5556.label_d8f4.setText(f'{f4:.4f}'),
-            # if i5: self.datawindow5556.label_d8i5.setText(f'{i5}'),
+        if alldata['type_of_data'] == 1:
+            self.label_d1f1.setText(f'{alldata["f1"]:.4f}')
+            self.label_d1f2.setText(f'{alldata["f2"]:.4f}')
+            self.label_d1f3.setText(f'{alldata["f3"]:.4f}')
+            self.label_d1f4.setText(f'{alldata["f4"]:.4f}')
+            self.label_d1f5.setText(f'{alldata["f5"]:.4f}')
+        elif alldata['type_of_data'] == 2:
+            self.label_d2i1.setText(f'{alldata["i1"]}')
+            self.label_d2i2.setText(f'{alldata["i2"]}')
+            self.label_d2i3.setText(f'{alldata["i3"]:.2f}')
+            # RECOGNIZE ME!!! там еще дохера данных
+        elif alldata['type_of_data'] == 8:
+            self.label_d8i1.setText(f'{alldata["i1"]}')
+            self.label_d8f2.setText(f'{alldata["f2"]:.2f}')
+            # if i3: self.datawindow5556.label_d8i3.setText(f'{i3}')
+            # if f4: self.datawindow5556.label_d8f4.setText(f'{f4:.4f}')
+            # if i5: self.datawindow5556.label_d8i5.setText(f'{i5}')
             if alldata["charger_status"] == 0:
                 self.label_d8i6.setText('NO charging.')  # ok
             elif alldata["charger_status"] == 6:
@@ -133,37 +144,20 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
                 self.label_d8i6.setText('DC-jack charging...')  # ok
             else:
                 self.label_d8i6.setText(f'{alldata["charger_status"]}')  # вдруг будет новинький статус зарядки
-                self.label_d8i7.setText(f'{alldata["bat_volt"] / 1000:.3f}V')  # 'Vbat={(i7/1000):.4f}'
-
-        def type_of_data_switcher(type_of_data: int):
-            switcher = {
-                1: lambda: (
-                    self.label_d1f1.setText(f'{alldata["f1"]:.4f}'),
-                    self.label_d1f2.setText(f'{alldata["f2"]:.4f}'),
-                    self.label_d1f3.setText(f'{alldata["f3"]:.4f}'),
-                    self.label_d1f5.setText(f'{alldata["f5"]:.4f}')
-                ),
-                2: lambda: (
-                    self.label_d2i1.setText(f'{alldata["i1"]}'),
-                    self.label_d2i2.setText(f'{alldata["i2"]}'),
-                    self.label_d2i3.setText(f'{alldata["i3"]:.2f}')  # RECOGNIZE ME!!! там еще дохера данных
-                ),
-                9: lambda: (
-                    self.label_d9f1.setText(f'{alldata["f1"]:.2f}'),
-                    self.label_d9f2.setText(f'{alldata["f2"]:.2f}'),
-                    self.label_d9f3.setText(f'{alldata["f3"]:.2f}'),
-                    self.label_d9f4.setText(f'{alldata["f4"]:.2f}'),
-                    self.label_d9f5.setText(f'{alldata["f5"]:.2f}')
-                ),
-                10: lambda: (
-                    self.label_d10f1.setText(f'{alldata["f1"]:.3f}'),
-                    self.label_d10f2.setText(f'{alldata["f2"]:.3f}'),
-                    self.label_d10f3.setText(f'{alldata["f3"]:.3f}')
-                )
-            }
-            switcher.get(type_of_data, lambda: print(f'5556 type of data = {alldata["type_of_data"]} NOT recognized'))
-
-        type_of_data_switcher(alldata['type_of_data'])
+            self.label_d8i7.setText(f'{alldata["bat_volt"] / 1000:.3f}V')  # 'Vbat={(i7/1000):.4f}'
+        elif alldata['type_of_data'] == 10:
+            self.label_d10f1.setText(f'{alldata["f1"]:.3f}')
+            self.label_d10f2.setText(f'{alldata["f2"]:.3f}')
+            self.label_d10f3.setText(f'{alldata["f3"]:.3f}')
+        elif alldata['type_of_data'] == 9:
+            self.label_d9f1.setText(f'{alldata["f1"]:.2f}')
+            self.label_d9f2.setText(f'{alldata["f2"]:.2f}')
+            self.label_d9f3.setText(f'{alldata["f3"]:.2f}')
+            self.label_d9f4.setText(f'{alldata["f4"]:.2f}')
+            self.label_d9f5.setText(f'{alldata["f5"]:.2f}')
+        else:
+            print(
+                f'5556 type of data = {alldata["type_of_data"]} NOT recognized')  # вдруг будет новинький тип блока данных
         self.update()
 
     def show_data(self, ip: str):  # инициализируем показ окна с данными
