@@ -6,7 +6,7 @@ from math import degrees
 from abc import abstractmethod  # ABC
 
 
-class GodOfDData(object):
+class GodOfDData(object):  # @ABC
     ip: str = "lan_is_NOT_connected"
     _sock: socket = None
     port: int = 0
