@@ -24,11 +24,10 @@ def _scan_lan_for_get_full_ip(ip: str) -> str:  # scan all_lan_for_get_ip
         if _these_host_is_a_robot(arp_data_ip):
             return arp_data_ip
 
-    if not arp_data_ip:  # а если не нашли,брутим локалку по айпи от х.х.х.1 до х.х.х.255  (это долго)
-        for last_octet_ip in range(1, 255):
-            host = ip + str(last_octet_ip)
-            if _these_host_is_a_robot(host):
-                return host
+    for last_octet_ip in range(1, 255):  # а если не нашли,брутим локалку по айпи от х.х.х.1 до х.х.х.255  (это долго)
+        host = ip + str(last_octet_ip)
+        if _these_host_is_a_robot(host):
+            return host
 
     return ip  # а если не нашли , -> 192.168.0.
 
