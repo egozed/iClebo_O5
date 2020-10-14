@@ -1,5 +1,5 @@
 # MACRO DEFINES
-PYSIDE_OR_PYQT: str = 'PYQT'  # CHOOSE GUI: PYSIDE |or| PYQT   ???
+PYSIDE_OR_PYQT: str = 'PYQT'  # CHOOSE GUI: PYSIDE ||or|| PYQT   ???
 DELAY: int = 1  # delay for showing info from 1 ms to infinity ms
 
 if PYSIDE_OR_PYQT == 'PYQT':
@@ -12,7 +12,6 @@ if PYSIDE_OR_PYQT == 'PYQT':
     from GUI.pyqt.w30001_ui import Ui_Form30001
     from GUI.pyqt.w30002_ui import Ui_Form30002
     from GUI.pyqt.w30003_ui import Ui_Form30003
-    # print('PYQT')
 else:  # PYSIDE_OR_PYQT == 'PYSIDE':
     # --------- инициализашки для PySide2 -------------------
     from PySide2.QtCore import QThread
@@ -23,7 +22,6 @@ else:  # PYSIDE_OR_PYQT == 'PYSIDE':
     from GUI.pyside.w30001_ui import Ui_Form30001
     from GUI.pyside.w30002_ui import Ui_Form30002
     from GUI.pyside.w30003_ui import Ui_Form30003
-    # print('PYSIDE')
 # --------------------------------------------------------------------
 from data import DataFrom5556, DataFrom30001, DataFrom30002, DataFrom30003  # data.py, дай человекопонятные данные из рп
 
