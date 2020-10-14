@@ -20,7 +20,7 @@ def _scan_lan_for_get_full_ip(ip: str) -> str:  # scan all_lan_for_get_ip
 
     from re import findall
     mac_pattern = "70-f1-1c-"
-    for arp_data_ip in findall(r'\s+('+ip+r'[\d]+)\s+'+mac_pattern+r'[-0-9a-f]{8}', raw_arp_data):
+    for arp_data_ip in findall(r'\s+('+ip+r'\d+)\s+'+mac_pattern+r'[-0-9a-f]{8}', raw_arp_data):
         if _these_host_is_a_robot(arp_data_ip):
             return arp_data_ip
 
