@@ -1,8 +1,8 @@
 def switch(case_key=None, case:dict={}):
-    if case.get("default") == None:
+    if case_key not in case.keys():
+        if "default" not in case.keys():
             print(f'Case key: "{case_key}" NOT found! and "default" key NOT exist')
-            return
-    if case.get(case_key) == None:
+        else:
             case["default"](case_key)
     else:
         case[case_key]()
@@ -10,7 +10,7 @@ def switch(case_key=None, case:dict={}):
 NO MORE if - elif - elif - ... - else !!! Just use switch case !!!
 "HOW TO USE: "
 
-case_key = 1
+case_key = 6
 
 switch( case_key,
         case = {
@@ -32,6 +32,6 @@ switch( case_key,
                         print(f"Case key: '{key}' not found! i am Default "),
                         )
                 }
-        )
-        
+        )    
+
 """
