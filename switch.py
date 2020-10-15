@@ -12,6 +12,8 @@ def switch(case_key=None, case: dict = {}):
 NO MORE if - elif - elif - ... - else !!! Just use switch case !!!
 "HOW TO USE: "
 
+from switch import switch
+
 case_key = 6
 
 switch( case_key,

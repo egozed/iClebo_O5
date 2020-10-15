@@ -4,7 +4,7 @@ from struct import unpack
 from time import strftime, localtime
 from math import degrees
 from abc import abstractmethod  # ABC
-
+from switch import switch
 
 class GodOfDData(object):  # @ABC
     ip: str = "lan_is_NOT_connected"
@@ -319,6 +319,8 @@ class DataFrom5556(GodOfDData):
         with BytesIO(one_raw_data_block) as rawData:
             # size = rawData.getbuffer().nbytes
             alldata['type_of_data'] = type_of_data
+
+
             if type_of_data == 1:  # all GET
                 (
                     f1,  # float
