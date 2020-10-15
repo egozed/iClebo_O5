@@ -24,6 +24,7 @@ else:  # PYSIDE_OR_PYQT == 'PYSIDE':
     from GUI.pyside.w30003_ui import Ui_Form30003
 # --------------------------------------------------------------------
 from data import DataFrom5556, DataFrom30001, DataFrom30002, DataFrom30003  # data.py, дай человекопонятные данные из рп
+from switch import switch
 
 
 class MainWindowApp(QMainWindow, Ui_MainWindow):
@@ -115,49 +116,65 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
 
     def show5556(self):
         alldata = self.get_info()  # получаем данные от рп
-        if alldata['type_of_data'] == 1:
-            self.label_d1f1.setText(f'{alldata["f1"]:.4f}')
-            self.label_d1f2.setText(f'{alldata["f2"]:.4f}')
-            self.label_d1f3.setText(f'{alldata["f3"]:.4f}')
-            self.label_d1f4.setText(f'{alldata["f4"]:.4f}')
-            self.label_d1f5.setText(f'{alldata["f5"]:.4f}')
-        elif alldata['type_of_data'] == 2:
-            self.label_d2i1.setText(f'{alldata["i1"]}')
-            self.label_d2i2.setText(f'{alldata["i2"]}')
-            self.label_d2i3.setText(f'{alldata["i3"]:.2f}')
-            # RECOGNIZE ME!!! там еще дохера данных
-        elif alldata['type_of_data'] == 8:
-            self.label_d8i1.setText(f'{alldata["i1"]}')
-            self.label_d8f2.setText(f'{alldata["f2"]:.2f}')
-            # if i3: self.datawindow5556.label_d8i3.setText(f'{i3}')
-            # if f4: self.datawindow5556.label_d8f4.setText(f'{f4:.4f}')
-            # if i5: self.datawindow5556.label_d8i5.setText(f'{i5}')
-            if alldata["charger_status"] == 0:
-                self.label_d8i6.setText('NO charging.')  # ok
-            elif alldata["charger_status"] == 6:
-                self.label_d8i6.setText('Dock charging...')  # ok
-            elif alldata["charger_status"] == 2:
-                self.label_d8i6.setText('FULL Charged by dock.')  # ok
-            elif alldata["charger_status"] == 18:
-                self.label_d8i6.setText('FULL Charged by DC-jack.')  # ok
-            elif alldata["charger_status"] == 22:
-                self.label_d8i6.setText('DC-jack charging...')  # ok
-            else:
-                self.label_d8i6.setText(f'{alldata["charger_status"]}')  # вдруг будет новинький статус зарядки
-            self.label_d8i7.setText(f'{alldata["bat_volt"] / 1000:.3f}V')  # 'Vbat={(i7/1000):.4f}'
-        elif alldata['type_of_data'] == 10:
-            self.label_d10f1.setText(f'{alldata["f1"]:.3f}')
-            self.label_d10f2.setText(f'{alldata["f2"]:.3f}')
-            self.label_d10f3.setText(f'{alldata["f3"]:.3f}')
-        elif alldata['type_of_data'] == 9:
-            self.label_d9f1.setText(f'{alldata["f1"]:.2f}')
-            self.label_d9f2.setText(f'{alldata["f2"]:.2f}')
-            self.label_d9f3.setText(f'{alldata["f3"]:.2f}')
-            self.label_d9f4.setText(f'{alldata["f4"]:.2f}')
-            self.label_d9f5.setText(f'{alldata["f5"]:.2f}')
-        else:
-            print(
-                f'5556 type of data = {alldata["type_of_data"]} NOT recognized')  # вдруг будет новинький тип блока данных
+        switch(alldata['type_of_data'],
+               case={
+                   1: lambda: (
+                       self.label_d1f1.setText(f'{alldata["f1"]:.4f}'),
+                       self.label_d1f2.setText(f'{alldata["f2"]:.4f}'),
+                       self.label_d1f3.setText(f'{alldata["f3"]:.4f}'),
+                       self.label_d1f4.setText(f'{alldata["f4"]:.4f}'),
+                       self.label_d1f5.setText(f'{alldata["f5"]:.4f}'),
+                   ),
+                   2: lambda: (
+                       self.label_d2i1.setText(f'{alldata["i1"]}'),
+                       self.label_d2i2.setText(f'{alldata["i2"]}'),
+                       self.label_d2i3.setText(f'{alldata["i3"]:.2f}'),
+                   ),
+                   8: lambda: (
+                       self.label_d8i1.setText(f'{alldata["i1"]}'),
+                       self.label_d8f2.setText(f'{alldata["f2"]:.2f}'),
+                       self.label_d8i7.setText(f'{alldata["bat_volt"] / 1000:.3f}V'),
+                       switch(alldata["charger_status"],
+                              case={
+                                  0: lambda: (
+                                      self.label_d8i6.setText('NO charging.'),
+                                  ),
+                                  6: lambda: (
+                                      self.label_d8i6.setText('Dock charging...'),
+                                  ),
+                                  2: lambda: (
+                                      self.label_d8i6.setText('FULL Charged by dock.'),
+                                  ),
+                                  18: lambda: (
+                                      self.label_d8i6.setText('FULL Charged by DC-jack.'),
+                                  ),
+                                  22: lambda: (
+                                      self.label_d8i6.setText('DC-jack charging...'),
+                                  ),
+                                  "default": lambda key: (
+                                      self.label_d8i6.setText(f'{key}'),
+                                  )
+                              }
+                              ),
+
+                   ),
+                   10: lambda: (
+                       self.label_d10f1.setText(f'{alldata["f1"]:.3f}'),
+                       self.label_d10f2.setText(f'{alldata["f2"]:.3f}'),
+                       self.label_d10f3.setText(f'{alldata["f3"]:.3f}'),
+                   ),
+                   9: lambda: (
+                       self.label_d9f1.setText(f'{alldata["f1"]:.2f}'),
+                       self.label_d9f2.setText(f'{alldata["f2"]:.2f}'),
+                       self.label_d9f3.setText(f'{alldata["f3"]:.2f}'),
+                       self.label_d9f4.setText(f'{alldata["f4"]:.2f}'),
+                       self.label_d9f5.setText(f'{alldata["f5"]:.2f}'),
+                   ),
+                   "default": lambda key: (
+                       print(f'5556 type of data = {key} NOT recognized'),
+                   )
+               }
+               )
         self.update()
 
     def show_data(self, ip: str):  # инициализируем показ окна с данными
