@@ -174,7 +174,7 @@ class DataFrom30002(GodOfDData):
                 int3,  # int
                 int4,  # int
             ) = unpack('1f4i', rawData.read(4 * 5))
-            rawData.seek(-297, 2)
+            rawData.seek(-298, 2)
             (sizeOfText,) = unpack('1i', rawData.read(4))
             while sizeOfText > 252 or sizeOfText < 238:
                 rawData.seek(-3, 1)
