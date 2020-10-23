@@ -112,7 +112,7 @@ class DataWinApp5556(QWidget, Ui_Form5556, DataFrom5556):
         self.th5556 = Th5()  # Создаём объект отдельного потока в котором будем вынимать и показывать данные из порта 5556
 
     def __repr__(self) -> str:
-        return 'WIN of RoboData :5556'
+        return f'WIN of RoboData: {self.port}'
 
     def show5556(self):
         alldata = self.get_info()  # получаем данные от рп
@@ -203,7 +203,7 @@ class DataWinApp30001(QWidget, Ui_Form30001, DataFrom30001):
         self.th30001 = Th1()  # Создаём объект отдельного потока в котором будем вынимать и показывать данные из порта 30001
 
     def __repr__(self) -> str:
-        return 'WIN of RoboData :30001'
+        return f'WIN of RoboData: {self.port}'
 
     def show30001(self):
         alldata = self.get_info()
@@ -244,7 +244,7 @@ class DataWinApp30002(QWidget, Ui_Form30002, DataFrom30002):
         self.th30002 = Th2()  # Создаём объект отдельного потока в котором будем вынимать и показывать данные из порта 30002
 
     def __repr__(self) -> str:
-        return 'WIN of RoboData :30002'
+        return f'WIN of RoboData: {self.port}'
 
     def show30002(self):
         alldata = self.get_info()
@@ -283,7 +283,7 @@ class DataWinApp30003(QWidget, Ui_Form30003, DataFrom30003):
         self.th30003 = Th3()  # Создаём объект отдельного потока в котором будем вынимать и показывать данные из порта 30003
 
     def __repr__(self) -> str:
-        return 'WIN of RoboData :30003'
+        return f'WIN of RoboData: {self.port}'
 
     def show30003(self):
         raw_data = self.get_info()

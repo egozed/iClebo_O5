@@ -4,7 +4,8 @@ from struct import unpack
 from time import strftime, localtime
 from math import degrees
 from abc import abstractmethod  # ABC
-from switch import switch
+# from switch import switch
+
 
 class GodOfDData(object):  # @ABC
     ip: str = "lan_is_NOT_connected"
@@ -54,8 +55,8 @@ class GodOfDData(object):  # @ABC
         raw_data_without_head_and_size: str  # bytes
         size_of_data: int
         heading: int
-        raw_head: str  # bytes
-        raw_size: str  # bytes
+        raw_head: str   # bytes
+        raw_size: str   # bytes
         wrong_head: bool = True
 
         while wrong_head:
@@ -174,26 +175,35 @@ class DataFrom30002(GodOfDData):
                 int3,  # int
                 int4,  # int
             ) = unpack('1f4i', rawData.read(4 * 5))
-            rawData.seek(-298, 2)
+            alldata['fl1'] = fl1
+            rawData.seek(-297, 2)
             (sizeOfText,) = unpack('1i', rawData.read(4))
             while sizeOfText > 252 or sizeOfText < 238:
                 rawData.seek(-3, 1)
                 (sizeOfText,) = unpack('1i', rawData.read(4))
                 # print("FUCK!!!!")
             else:
-                (Text1,) = unpack(f'{sizeOfText}s', rawData.read(sizeOfText))
-                (sizeOf2Text,) = unpack('1i', rawData.read(4))
-                (Text2,) = unpack(f'{sizeOf2Text}s', rawData.read(sizeOf2Text))
-        alldata['fl1'] = fl1
-        txt1 = Text1.decode('ascii')
-        alldata['t1'], \
-        alldata['t2'], \
-        alldata['t3'], \
-        alldata['t4'], \
-        alldata['t5'] = txt1.split('\n')
-        txt2 = Text2.decode('ascii')
-        alldata['t6'], \
-        alldata['t7'] = txt2.split('\n')
+                try:
+                    (Text1,) = unpack(f'{sizeOfText}s', rawData.read(sizeOfText))
+                except:
+                    return alldata
+                else:
+                    (sizeOf2Text,) = unpack('1i', rawData.read(4))
+                    txt1 = Text1.decode('ascii')
+                    alldata['t1'], \
+                    alldata['t2'], \
+                    alldata['t3'], \
+                    alldata['t4'], \
+                    alldata['t5'] = txt1.split('\n')
+                    if sizeOf2Text < 250:
+                        try:
+                            (Text2,) = unpack(f'{sizeOf2Text}s', rawData.read(sizeOf2Text))
+                        except:
+                            return alldata
+                        else:
+                            txt2 = Text2.decode('ascii')
+                            alldata['t6'], \
+                            alldata['t7'] = txt2.split('\n')
         return alldata  # = fl1, t1, t2, t3, t4, t6
 
 
